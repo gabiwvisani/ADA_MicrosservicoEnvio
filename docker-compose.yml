@@ -1,0 +1,40 @@
+#FROM ubuntu:latest
+#LABEL authors="Gabriela Visani"
+#
+#ENTRYPOINT ["top", "-b"]
+version: "3"
+services:
+  ecommerce_envio_db:
+    image: postgres:10
+    volumes:
+      - db-data:/var/lib/postgresql/data1
+      - ./start_script/startup.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_PASSWORD: envio
+      POSTGRES_USER: sa
+      POSTGRES_DB: envio
+    ports:
+      - "5433:5432"
+
+  ecommerce_envio_rabbit:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_management2
+
+    ports:
+      - 5672:5672 # (erlang) communication between the nodes and CLI tool
+      - 15672:15672 # communication with the web management API
+
+    volumes:
+      # data persistence
+      - /docker_conf/rabbitmq/data/:/var/lib/rabbitmq/
+      # data mapping -> host: container
+      # queues and messages data of the container will be stored on the host
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=passw123
+
+    restart: always
+
+volumes:
+  db-data:
+    driver: local

@@ -8,51 +8,51 @@ server:
 
 spring:
   application:
-    name: default-arquetype
+    name: ecommerce-service-service
   main:
     allow-bean-definition-overriding: true
 #Remove this feature to enable database connections
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-  liquibase:
-    enabled: false
+#  autoconfigure:
+#    exclude:
+#      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+#  liquibase:
+#    enabled: false
 ##  --------
 
 ## Enabling database connection
-#  datasource:
-#    url: jdbc:postgresql://localhost:<port>/<db>
-#    username: <username>
-#    password: <password>
-#    continue-on-error: true
-#  jpa:
-#    open-in-view: false
-#    show-sql: true
-#    format-sql: true
-#    hibernate:
-#      ddl-auto: update
-#    database-platform: org.hibernate.dialect.PostgreSQLDialect
-#    properties:
-#      hibernate:
-#        jdbc:
-#          batch_size: 50
+  datasource:
+    url: jdbc:postgresql://localhost:5433/envio
+    username: sa
+    password: envio
+    continue-on-error: true
+  jpa:
+    open-in-view: false
+    show-sql: true
+    format-sql: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 50
 
 ## Enable liquidbase
 
-#  liquibase:
-#    enabled: true
-#    change-log: classpath:db/changelog/changelog-local.xml
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/changelog-local.xml
 
 ## Enabling rabbitmq
 
-#  rabbitmq:
-#    host: 127.0.0.1
-#    port: 5672
-#    username: <username>
-#    password: <password>
-#    cache:
-#      connection:
-#        mode: CONNECTION
-#      channel:
-#        size: 50
-#      checkout-timeout: 10000
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: sa
+    password: envio
+    cache:
+      connection:
+        mode: CONNECTION
+      channel:
+        size: 50
+      checkout-timeout: 10000
