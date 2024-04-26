@@ -25,11 +25,13 @@ public class Envio {
     private String estado;
     private String pais;
     private String cep;
+    private boolean enviadoProCliente;
+
 
 
     public Envio(long idCliente, long idCompra, String remetente, String enderecoRemetente, String destinatario,
                  String enderecoDestinatatio, String cidade,
-                 String estado, String pais, String cep) {
+                 String estado, String pais, String cep, boolean enviadoProCliente) {
         this.idCliente = idCliente;
         this.idCompra = idCompra;
         this.remetente = remetente;
@@ -40,6 +42,7 @@ public class Envio {
         this.estado = estado;
         this.pais = pais;
         this.cep = cep;
+        this.enviadoProCliente = enviadoProCliente;
     }
 
 
