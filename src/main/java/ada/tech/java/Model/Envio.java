@@ -14,37 +14,29 @@ public class Envio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idenvio;
-    private long idCliente;
-    private long idCompra;
-    private String remetente;
-    private String enderecoRemetente;
+    private String id_envio;
+    private String id_cliente;
+    private String id_compra;
     private String destinatario;
-    private String enderecoDestinatatio;
+    private String rua;
+    private String bairro;
     private String cidade;
     private String estado;
-    private String pais;
     private String cep;
     private boolean enviadoProCliente;
 
-
-
-    public Envio(long idCliente, long idCompra, String remetente, String enderecoRemetente, String destinatario,
-                 String enderecoDestinatatio, String cidade,
-                 String estado, String pais, String cep, boolean enviadoProCliente) {
-        this.idCliente = idCliente;
-        this.idCompra = idCompra;
-        this.remetente = remetente;
-        this.enderecoRemetente = enderecoRemetente;
+    public Envio(String id_cliente, String id_compra, String destinatario, String rua, String bairro, String cidade,
+                 String estado, String cep, boolean enviadoProCliente) {
+        this.id_cliente = id_cliente;
+        this.id_compra = id_compra;
         this.destinatario = destinatario;
-        this.enderecoDestinatatio = enderecoDestinatatio;
+        this.rua = rua;
+        this.bairro = bairro;
         this.cidade = cidade;
         this.estado = estado;
-        this.pais = pais;
         this.cep = cep;
         this.enviadoProCliente = enviadoProCliente;
     }
-
 
     public Envio() {
 
