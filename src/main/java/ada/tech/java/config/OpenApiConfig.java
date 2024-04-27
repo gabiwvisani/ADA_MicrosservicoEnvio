@@ -11,7 +11,7 @@ public class OpenApiConfig {
     public OpenAPI defaultOpenApiConfig(){
         return new OpenAPI()
                 .info(new Info().title("API Microsserviço Envio")
-                        .description("Default description ")
+                        .description("Envio Service Request ")
                         .version("0.0.1"));
     }
 }
