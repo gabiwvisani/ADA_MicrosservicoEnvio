@@ -22,7 +22,7 @@ public class ConsultarEnvioService {
     }
 
     @Async
-    public Optional<Envio> execute(long idEnvio){
+    public Optional<Envio> execute(String idEnvio){
         return envioRepository.findById(idEnvio);
     }
 }
