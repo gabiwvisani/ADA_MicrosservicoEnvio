@@ -14,7 +14,7 @@
         </preConditions>
 
         <createTable tableName="envio">
-            <column name="id_envio" type="serial" >
+            <column name="id_envio" type="character varying(255)" >
                 <constraints primaryKey="true" nullable="false"  />
             </column>
 

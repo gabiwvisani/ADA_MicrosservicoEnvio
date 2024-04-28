@@ -21,7 +21,7 @@ import org.modelmapper.ModelMapper;
 import java.util.Optional;
 
 @RestController
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Slf4j
 public class EnvioController {
     private final CadastrarEnvioService cadastrarEnvioService;
@@ -59,8 +59,9 @@ public class EnvioController {
             @ApiResponse(responseCode = "404", description = "Envio não encontrado"),
     })
     @GetMapping("/consulta/envio/{id}")
-    public void buscarEnvioPorID(@PathVariable String id) {
+    public Optional<Envio> buscarEnvioPorID(@PathVariable String id) {
         Optional<Envio> optionalEnvio = consultarEnvioService.execute(id);
+        return Optional.of(optionalEnvio.get());
     }
     @Operation(summary = "Alterar status envio")
     @ApiResponses(value = {

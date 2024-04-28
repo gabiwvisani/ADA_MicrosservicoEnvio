@@ -8,7 +8,7 @@ server:
 
 spring:
   application:
-    name: ecommerce-service-service
+    name: envio-service
   main:
     allow-bean-definition-overriding: true
 #Remove this feature to enable database connections
@@ -58,3 +58,11 @@ spring:
   sql:
     init:
       continue-on-error: true
+
+      negocio:
+        envio:
+          url: http://localhost:9080
+
+          fila:
+            reservar:
+              out: reservar_envio

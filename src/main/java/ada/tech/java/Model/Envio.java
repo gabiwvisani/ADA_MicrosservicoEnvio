@@ -1,5 +1,6 @@
 package ada.tech.java.Model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,11 +9,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name="envio")
-
 public class Envio {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(example = "cb79646c-7de5-11ee-b962-0242ac120002")
     @Column(name="id_envio", nullable=false)
     private String id_envio;
     private String id_cliente;
