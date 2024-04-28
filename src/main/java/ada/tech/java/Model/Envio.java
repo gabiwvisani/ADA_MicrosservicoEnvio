@@ -23,10 +23,10 @@ public class Envio {
     private String cidade;
     private String estado;
     private String cep;
-    private boolean enviadoProCliente;
+    private boolean statusEnviadoProCliente;
 
     public Envio(String id_cliente, String id_compra, String destinatario, String rua, String bairro, String cidade,
-                 String estado, String cep, boolean enviadoProCliente) {
+                 String estado, String cep, boolean statusEnviadoProCliente) {
         this.id_cliente = id_cliente;
         this.id_compra = id_compra;
         this.destinatario = destinatario;
@@ -35,7 +35,7 @@ public class Envio {
         this.cidade = cidade;
         this.estado = estado;
         this.cep = cep;
-        this.enviadoProCliente = enviadoProCliente;
+        this.statusEnviadoProCliente = statusEnviadoProCliente;
     }
 
     public Envio() {
