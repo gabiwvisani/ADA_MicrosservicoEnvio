@@ -1,6 +1,7 @@
 package ada.tech.java.Queue;
 
-import ada.tech.java.payloads.Response.EnvioResponse;
+import ada.tech.java.payloads.Response.EnvioErrorResponse;
+//import ada.tech.java.payloads.Response.EnvioResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +19,11 @@ public class EnvioPublisher {
     private final RabbitTemplate rabbitTemplate;
     private final Queue queue;
 
-    public void publish(EnvioResponse envioResponse) {
-        log.info("Mensagem enviada para o broker {}", envioResponse);
+    public void publish(EnvioErrorResponse envioErrorResponse) {
+        log.info("Mensagem enviada para o broker {}", envioErrorResponse);
         String mensagem = null;
         try {
-            mensagem = objectMapper.writeValueAsString(envioResponse);
+            mensagem = objectMapper.writeValueAsString(envioErrorResponse);
             rabbitTemplate.convertAndSend(queue.getName(), mensagem);
 
         } catch (JsonProcessingException e) {

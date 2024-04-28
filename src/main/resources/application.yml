@@ -24,7 +24,6 @@ spring:
     url: jdbc:postgresql://localhost:5433/envio
     username: sa
     password: envio
-    continue-on-error: true
   jpa:
     open-in-view: false
     show-sql: true
@@ -56,3 +55,6 @@ spring:
       channel:
         size: 50
       checkout-timeout: 10000
+  sql:
+    init:
+      continue-on-error: true
