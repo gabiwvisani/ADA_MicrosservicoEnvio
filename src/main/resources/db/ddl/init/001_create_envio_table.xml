@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="init_create_table_envio" author="grupo01">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="envio" />
+            </not>
+        </preConditions>
+
+        <createTable tableName="envio">
+            <column name="id_envio" type="serial" >
+                <constraints primaryKey="true" nullable="false"  />
+            </column>
+
+            <column name="id_cliente" type="character varying(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="id_compra" type="character varying(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="destinatario" type="character varying(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="rua" type="character varying(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="bairro" type="character varying(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="cidade" type="character varying(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="estado" type="character varying(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="cep" type="character varying(8)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="status_enviado_pro_cliente" type="boolean">
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

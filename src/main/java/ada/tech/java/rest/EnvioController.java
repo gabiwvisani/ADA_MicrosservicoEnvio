@@ -1,10 +1,12 @@
 package ada.tech.java.rest;
 
 import ada.tech.java.Model.Envio;
+import ada.tech.java.Queue.EnvioPublisher;
 import ada.tech.java.Service.CadastrarEnvioService;
 import ada.tech.java.Service.ConsultarEnvioService;
 import ada.tech.java.payloads.Request.AlteraStatusEnvioRequest;
 import ada.tech.java.payloads.Request.EnvioRequest;
+import ada.tech.java.payloads.Response.EnvioErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,12 +27,14 @@ public class EnvioController {
     private final CadastrarEnvioService cadastrarEnvioService;
     private final ModelMapper modelMapper;
     private final ConsultarEnvioService consultarEnvioService;
+    private final EnvioPublisher envioPublisher;
    // private final ListarEnviosService listarEnviosService;
    @Autowired
-   public EnvioController(ModelMapper modelMapper, CadastrarEnvioService cadastrarEnvioService, ConsultarEnvioService consultarEnvioService){
+   public EnvioController(ModelMapper modelMapper, CadastrarEnvioService cadastrarEnvioService, ConsultarEnvioService consultarEnvioService, EnvioPublisher envioPublisher){
        this.modelMapper = modelMapper;
        this.cadastrarEnvioService = cadastrarEnvioService;
        this.consultarEnvioService =consultarEnvioService;
+       this.envioPublisher = envioPublisher;
    }
     @Operation(summary = "Cadastrar Envio")
     @ApiResponses(value = {
@@ -45,7 +49,8 @@ public class EnvioController {
             Envio envioConvertido = modelMapper.map(envioRequest, Envio.class);
             cadastrarEnvioService.execute(envioConvertido);
         }catch(Exception e){
-            //fazer algo aqui para publicar erro
+            EnvioErrorResponse envioErrorResponse = new EnvioErrorResponse (envioRequest.getId_compra(),"Contrato não enviado, erro na requisição.");
+            envioPublisher.publish(envioErrorResponse);
         }
     }
     @Operation(summary = "Consultar envio de compra")
