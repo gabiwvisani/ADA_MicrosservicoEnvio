@@ -11,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AlteraStatusEnvioRequest {
-    //@JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String id_compra;
     private boolean statusEnviadoProCliente;
 }

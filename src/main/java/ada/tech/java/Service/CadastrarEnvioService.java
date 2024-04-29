@@ -15,11 +15,14 @@ private final EnvioRepository envioRepository;
 
 private final EnvioRequest envioRequest;
 
+    private final CadastrarEnvioService cadastrarEnvioService;
+
 
 private final Envio envio;
-    public CadastrarEnvioService(EnvioRepository envioRepository, EnvioRequest envioRequest, Envio envio) {
+    public CadastrarEnvioService(EnvioRepository envioRepository, EnvioRequest envioRequest, CadastrarEnvioService cadastrarEnvioService, Envio envio) {
         this.envioRepository = envioRepository;
         this.envioRequest = envioRequest;
+        this.cadastrarEnvioService = cadastrarEnvioService;
         this.envio = envio;
     }
 
