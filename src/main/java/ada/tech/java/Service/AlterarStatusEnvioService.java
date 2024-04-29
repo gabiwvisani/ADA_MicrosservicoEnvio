@@ -14,8 +14,8 @@ public class AlterarStatusEnvioService {
     private final ConsultarEnvioService consultarEnvioService;
     private final CadastrarEnvioService cadastrarEnvioService;
 
-    public String alterarStatusEnvio(String id_compra, boolean novoStatus) {
-        Optional<Envio> optionalEnvio = consultarEnvioService.execute(id_compra);
+    public String alterarStatusEnvio(String id_envio, boolean novoStatus) {
+        Optional<Envio> optionalEnvio = consultarEnvioService.execute(id_envio);
 
         if (optionalEnvio.isPresent()) {
             Envio envio = optionalEnvio.get();
@@ -23,7 +23,7 @@ public class AlterarStatusEnvioService {
             cadastrarEnvioService.execute(envio);
             return null;
         } else {
-            return EnvioNaoEncontradoResponse.retornarMensagemDeErro(id_compra);
+            return EnvioNaoEncontradoResponse.retornarMensagemDeErro(id_envio);
         }
     }
 

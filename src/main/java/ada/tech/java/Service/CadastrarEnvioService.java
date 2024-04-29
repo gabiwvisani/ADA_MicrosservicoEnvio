@@ -13,17 +13,8 @@ public class CadastrarEnvioService {
 
 private final EnvioRepository envioRepository;
 
-private final EnvioRequest envioRequest;
-
-    private final CadastrarEnvioService cadastrarEnvioService;
-
-
-private final Envio envio;
-    public CadastrarEnvioService(EnvioRepository envioRepository, EnvioRequest envioRequest, CadastrarEnvioService cadastrarEnvioService, Envio envio) {
+    public CadastrarEnvioService(EnvioRepository envioRepository) {
         this.envioRepository = envioRepository;
-        this.envioRequest = envioRequest;
-        this.cadastrarEnvioService = cadastrarEnvioService;
-        this.envio = envio;
     }
 
     @Async
