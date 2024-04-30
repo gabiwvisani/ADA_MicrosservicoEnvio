@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @Slf4j
@@ -14,15 +15,13 @@ import java.util.Optional;
 public class ConsultarEnvioService {
     private final EnvioRepository envioRepository;
 
-    //private final long idEnvio;
-
     public ConsultarEnvioService(EnvioRepository envioRepository) {
         this.envioRepository = envioRepository;
-        //this.idEnvio = idEnvio;
     }
 
     @Async
-    public Optional<Envio> execute(String idEnvio){
-        return envioRepository.findById(idEnvio);
+    public CompletableFuture<Optional<Envio>> execute(String idEnvio) {
+        Optional<Envio> envio = envioRepository.findById(idEnvio);
+        return CompletableFuture.completedFuture(envio);
     }
 }
