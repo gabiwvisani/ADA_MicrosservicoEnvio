@@ -3,17 +3,19 @@ package ada.tech.java.Model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name="envio")
 public class Envio {
-
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Schema(example = "cb79646c-7de5-11ee-b962-0242ac120002")
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name="id_envio", nullable=false)
     private String id_envio;
     private String id_cliente;
@@ -27,7 +29,7 @@ public class Envio {
     private boolean statusEnviadoProCliente;
 
     public Envio(String id_cliente, String id_compra, String destinatario, String rua, String bairro, String cidade,
-                 String estado, String cep, boolean statusEnviadoProCliente) {
+                 String estado, String cep ) {
         this.id_cliente = id_cliente;
         this.id_compra = id_compra;
         this.destinatario = destinatario;
@@ -36,10 +38,10 @@ public class Envio {
         this.cidade = cidade;
         this.estado = estado;
         this.cep = cep;
-        this.statusEnviadoProCliente = statusEnviadoProCliente;
+        this.statusEnviadoProCliente = true;
     }
 
-    public Envio() {
-
-    }
+//    public Envio() {
+//
+//    }
 }

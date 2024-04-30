@@ -2,6 +2,7 @@ package ada.tech.java.rest;
 
 import ada.tech.java.Model.Envio;
 import ada.tech.java.Queue.EnvioPublisher;
+import ada.tech.java.Repository.EnvioRepository;
 import ada.tech.java.Service.AlterarStatusEnvioService;
 import ada.tech.java.Service.CadastrarEnvioService;
 import ada.tech.java.Service.ConsultarEnvioService;
@@ -33,9 +34,11 @@ public class EnvioController {
     private final EnvioPublisher envioPublisher;
     private final ListarEnviosService listarEnviosService;
     private final AlterarStatusEnvioService alterarStatusEnvioService;
+    private final EnvioRepository envioRepository;
 
    @Autowired
-   public EnvioController(ModelMapper modelMapper, CadastrarEnvioService cadastrarEnvioService, ConsultarEnvioService consultarEnvioService, EnvioPublisher envioPublisher, ListarEnviosService listarEnviosService, AlterarStatusEnvioService alterarStatusEnvioService){
+   public EnvioController(EnvioRepository envioRepository,ModelMapper modelMapper, CadastrarEnvioService cadastrarEnvioService, ConsultarEnvioService consultarEnvioService, EnvioPublisher envioPublisher, ListarEnviosService listarEnviosService, AlterarStatusEnvioService alterarStatusEnvioService){
+       this.envioRepository=envioRepository;
        this.modelMapper = modelMapper;
        this.cadastrarEnvioService = cadastrarEnvioService;
        this.consultarEnvioService =consultarEnvioService;
@@ -46,20 +49,19 @@ public class EnvioController {
 
 
     @Operation(summary = "Cadastrar Envio")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Compra enviada com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Erro ao tentar enviar uma compra"),
-    })
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "201", description = "Compra enviada com sucesso"),
+//            @ApiResponse(responseCode = "400", description = "Erro ao tentar enviar uma compra"),
+//           @ApiResponse(responseCode = "422", description = "Erro ao tentar enviar uma compra")
+//    })
     @PostMapping("/add/envio")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void cadastrarEnvio(@RequestBody EnvioRequest envioRequest) {
+    public ResponseEntity<String> cadastrarEnvio(@RequestBody EnvioRequest envioRequest) {
         log.info("Requisição recebida para cadastrar envio: {}", envioRequest);
         try {
-            Envio envioConvertido = modelMapper.map(envioRequest, Envio.class);
-            cadastrarEnvioService.execute(envioConvertido);
-        }catch(Exception e){
-            EnvioErrorResponse envioErrorResponse = new EnvioErrorResponse (envioRequest.getId_compra(),"Contrato não enviado, erro na requisição.");
-            envioPublisher.publish(envioErrorResponse);
+            cadastrarEnvioService.execute(envioRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Compra enviada com sucesso");
+        }catch(RuntimeException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao tentar enviar uma compra: Informações insuficientes");
         }
     }
 
@@ -76,20 +78,26 @@ public class EnvioController {
         return envio.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    @Operation(summary = "Consultar todos envios")
+    @GetMapping("/consulta/envios")
+    public List<Envio> buscarEnvioPorID() throws InterruptedException, ExecutionException, ExecutionException {
+        List<Envio> listaComTodos = envioRepository.findAll();
+        return listaComTodos;
+    }
 
 
     @Operation(summary = "Alterar status envio")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Alterado o status do envio"),
-            @ApiResponse(responseCode = "404", description = "Envio não encontrado"),
-    })
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Alterado o status do envio"),
+//            @ApiResponse(responseCode = "404", description = "Envio não encontrado"),
+//    })
     @PatchMapping("/altera/status/envio/{id}")
     public ResponseEntity<?> alterarStatusEnvio(
             @PathVariable String id,
             @RequestBody AlteraStatusEnvioRequest request) {
         try {
-            String mensagemErro = String.valueOf(alterarStatusEnvioService.alterarStatusEnvio(id, request.isStatusEnviadoProCliente()));
-            if (mensagemErro != null) {
+            String alterado = String.valueOf(alterarStatusEnvioService.alterarStatusEnvio(id, request.isStatusEnviadoProCliente()));
+            if (alterado.isEmpty()||alterado.isBlank()) {
                 return ResponseEntity.notFound().build();
             } else {
                 return ResponseEntity.ok().build();
