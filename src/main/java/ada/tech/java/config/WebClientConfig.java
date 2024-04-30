@@ -17,7 +17,7 @@ public class WebClientConfig {
         return WebClient.builder().baseUrl(envioUrl)
                 .build();
     }
-    @Bean
+    //@Bean
     EnvioController envioController (WebClient webClient){
         HttpServiceProxyFactory httpServiceProxyFactory =
                 HttpServiceProxyFactory.builder(WebClientAdapter

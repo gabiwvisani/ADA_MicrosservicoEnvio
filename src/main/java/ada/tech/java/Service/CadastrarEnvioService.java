@@ -14,13 +14,11 @@ public class CadastrarEnvioService {
 private final EnvioRepository envioRepository;
 
 private final EnvioRequest envioRequest;
-
-
 private final Envio envio;
-    public CadastrarEnvioService(EnvioRepository envioRepository, EnvioRequest envioRequest, Envio envio) {
+    public CadastrarEnvioService(EnvioRepository envioRepository) {
         this.envioRepository = envioRepository;
-        this.envioRequest = envioRequest;
-        this.envio = envio;
+        this.envioRequest = new EnvioRequest();
+        this.envio = new Envio();
     }
 
     @Async
