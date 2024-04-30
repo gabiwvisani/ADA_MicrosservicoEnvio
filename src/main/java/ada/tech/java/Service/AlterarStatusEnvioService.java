@@ -2,11 +2,14 @@ package ada.tech.java.Service;
 
 import ada.tech.java.Model.Envio;
 import ada.tech.java.Repository.EnvioRepository;
-import ada.tech.java.payloads.Response.EnvioNaoEncontradoResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 @AllArgsConstructor
 @Service
 public class AlterarStatusEnvioService {
@@ -14,18 +17,23 @@ public class AlterarStatusEnvioService {
     private final ConsultarEnvioService consultarEnvioService;
     private final CadastrarEnvioService cadastrarEnvioService;
 
-    public String alterarStatusEnvio(String id_envio, boolean novoStatus) {
-        Optional<Envio> optionalEnvio = consultarEnvioService.execute(id_envio);
+    @Async
+    public CompletableFuture<Optional<Envio>> alterarStatusEnvio(String id_envio, boolean novoStatus) {
+        CompletableFuture<Optional<Envio>> futureEnvio = consultarEnvioService.execute(id_envio);
 
-        if (optionalEnvio.isPresent()) {
-            Envio envio = optionalEnvio.get();
-            envio.setStatusEnviadoProCliente(novoStatus);
-            cadastrarEnvioService.execute(envio);
+        try {
+            Optional<Envio> envio = futureEnvio.get();
+            if (envio.isPresent()) {
+                envio.get().setStatusEnviadoProCliente(novoStatus);
+                cadastrarEnvioService.execute(envio.orElse(null));
+                return futureEnvio;
+            } else {
+                return null;
+            }
+        } catch (InterruptedException | ExecutionException e) {
+
             return null;
-        } else {
-            return EnvioNaoEncontradoResponse.retornarMensagemDeErro(id_envio);
         }
+
     }
-
-
 }
