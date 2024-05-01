@@ -10,6 +10,8 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -19,11 +21,11 @@ public class EnvioPublisher {
     private final RabbitTemplate rabbitTemplate;
     private final Queue queue;
 
-    public void publish(EnvioErrorResponse envioErrorResponse) {
-        log.info("Mensagem enviada para o broker {}", envioErrorResponse);
+    public void publish(List<EnvioErrorResponse> envioErrorResponses) {
+        log.info("Mensagem enviada para o broker {}", envioErrorResponses);
         String mensagem = null;
         try {
-            mensagem = objectMapper.writeValueAsString(envioErrorResponse);
+            mensagem = objectMapper.writeValueAsString(envioErrorResponses);
             rabbitTemplate.convertAndSend(queue.getName(), mensagem);
 
         } catch (JsonProcessingException e) {

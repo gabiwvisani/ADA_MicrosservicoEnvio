@@ -9,6 +9,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import ada.tech.java.payloads.Request.EnvioRequest;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -28,8 +31,10 @@ private final EnvioRepository envioRepository;
     @Async
     public CompletableFuture<EnvioErrorResponse> execute(EnvioRequest envioRequest) {
         EnvioErrorResponse envioErrorResponse = new EnvioErrorResponse();
-
+        List<EnvioErrorResponse> envioErrorResponses = new ArrayList<>();
+        envioErrorResponses.add(envioErrorResponse);
         if (envioRequest.getId_cliente().isBlank() || envioRequest.getId_compra().isBlank() || envioRequest.getCep().isBlank()) {
+
             envioErrorResponse.setId_compra(envioRequest.getId_compra());
             if (envioRequest.getId_cliente().isBlank()) {
                 envioErrorResponse.setError("Id_cliente não enviado, erro na requisição.");
@@ -38,7 +43,7 @@ private final EnvioRepository envioRepository;
             } else {
                 envioErrorResponse.setError("Cep não enviado, erro na requisição.");
             }
-            envioPublisher.publish(envioErrorResponse);
+            envioPublisher.publish(envioErrorResponses);
             return CompletableFuture.completedFuture(envioErrorResponse);
         }
 
@@ -50,7 +55,7 @@ private final EnvioRepository envioRepository;
         } catch (Exception e) {
             envioErrorResponse.setId_compra(envioRequest.getId_compra());
             envioErrorResponse.setError("Erro ao cadastrar envio: " + e.getMessage());
-            envioPublisher.publish(envioErrorResponse);
+            envioPublisher.publish(envioErrorResponses);
             return CompletableFuture.completedFuture(envioErrorResponse);
         }
     }
