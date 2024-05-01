@@ -24,45 +24,33 @@ private final EnvioRepository envioRepository;
         this.modelMapper= modelMapper;
         this.envioPublisher = envioPublisher;
     }
-    private EnvioErrorResponse envioErrorResponse = new EnvioErrorResponse();
-
 
     @Async
-    public CompletableFuture<Envio> execute(EnvioRequest envioRequest) {
-        envioErrorResponse.setError("");
-        if(envioRequest.getId_cliente().isBlank()||envioRequest.getId_cliente().isEmpty()||envioRequest.getId_cliente().equals("")) {
-             envioErrorResponse.setId_compra(envioRequest.getId_compra());
-            envioErrorResponse.setError("Id_cliente não enviado, erro na requisição.");
-            throw new RuntimeException(envioErrorResponse.getError());
+    public CompletableFuture<EnvioErrorResponse> execute(EnvioRequest envioRequest) {
+        EnvioErrorResponse envioErrorResponse = new EnvioErrorResponse();
 
-        }
-        if(envioRequest.getId_compra().isBlank()||envioRequest.getId_compra().isEmpty()) {
+        if (envioRequest.getId_cliente().isBlank() || envioRequest.getId_compra().isBlank() || envioRequest.getCep().isBlank()) {
             envioErrorResponse.setId_compra(envioRequest.getId_compra());
-            envioErrorResponse.setError("Id_compra não enviado, erro na requisição.");
-            throw new RuntimeException(envioErrorResponse.getError());
-        }
-        if(envioRequest.getCep().isBlank()||envioRequest.getCep().isEmpty()) {
-            envioErrorResponse.setId_compra(envioRequest.getId_compra());
-            envioErrorResponse.setError("Cep não enviado, erro na requisição.");
-            throw new RuntimeException(envioErrorResponse.getError());
-        }
-        if(!envioErrorResponse.getError().isBlank()&&!envioErrorResponse.getError().isEmpty()) {
+            if (envioRequest.getId_cliente().isBlank()) {
+                envioErrorResponse.setError("Id_cliente não enviado, erro na requisição.");
+            } else if (envioRequest.getId_compra().isBlank()) {
+                envioErrorResponse.setError("Id_compra não enviado, erro na requisição.");
+            } else {
+                envioErrorResponse.setError("Cep não enviado, erro na requisição.");
+            }
             envioPublisher.publish(envioErrorResponse);
-            throw new RuntimeException(envioErrorResponse.getError());
-
-            //return CompletableFuture.failedFuture(new RuntimeException());
+            return CompletableFuture.completedFuture(envioErrorResponse);
         }
+
         try {
-            //envioErrorResponse.setId_compra(envioRequest.getId_compra());
-           // envioErrorResponse.setError("Cep não enviado, erro na requisição.");
-           // envioPublisher.publish(envioErrorResponse);
-        Envio envioCadastrado = modelMapper.map(envioRequest, Envio.class);
-        envioCadastrado.setStatusEnviadoProCliente(true);
-         envioCadastrado = envioRepository.save(envioCadastrado);
-        return CompletableFuture.completedFuture(envioCadastrado);
+            Envio envioCadastrado = modelMapper.map(envioRequest, Envio.class);
+            envioCadastrado.setStatusEnviadoProCliente(true);
+            envioCadastrado = envioRepository.save(envioCadastrado);
+            return CompletableFuture.completedFuture(null); // Retorna null indicando sucesso
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao cadastrar envio: " + e.getMessage());
+            envioErrorResponse.setError("Erro ao cadastrar envio: " + e.getMessage());
+            envioPublisher.publish(envioErrorResponse);
+            return CompletableFuture.completedFuture(envioErrorResponse);
         }
     }
-
 }
