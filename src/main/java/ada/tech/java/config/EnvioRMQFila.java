@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class EnvioRMQFila {
-    @Value("http://localhost:5672")
+    @Value("http://localhost:9080")
     private String fila;
     @Bean
     public Queue queue(){

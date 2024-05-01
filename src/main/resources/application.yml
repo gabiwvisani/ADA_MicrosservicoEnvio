@@ -61,7 +61,7 @@ spring:
 
       negocio:
         envio:
-          url: http://localhost:5672
+          url: http://localhost:9080
           fila: fila_envio
 #            reservar:
 #              out: fila_envio
