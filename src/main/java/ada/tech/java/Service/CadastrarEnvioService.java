@@ -48,6 +48,7 @@ private final EnvioRepository envioRepository;
             envioCadastrado = envioRepository.save(envioCadastrado);
             return CompletableFuture.completedFuture(null); // Retorna null indicando sucesso
         } catch (Exception e) {
+            envioErrorResponse.setId_compra(envioRequest.getId_compra());
             envioErrorResponse.setError("Erro ao cadastrar envio: " + e.getMessage());
             envioPublisher.publish(envioErrorResponse);
             return CompletableFuture.completedFuture(envioErrorResponse);
