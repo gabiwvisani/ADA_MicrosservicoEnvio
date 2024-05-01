@@ -22,6 +22,7 @@ import org.modelmapper.ModelMapper;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -55,14 +56,19 @@ public class EnvioController {
 //           @ApiResponse(responseCode = "422", description = "Erro ao tentar enviar uma compra")
 //    })
     @PostMapping("/add/envio")
-    public ResponseEntity<String> cadastrarEnvio(@RequestBody EnvioRequest envioRequest) {
+    public ResponseEntity<EnvioErrorResponse> cadastrarEnvio(@RequestBody EnvioRequest envioRequest) {
         log.info("Requisição recebida para cadastrar envio: {}", envioRequest);
         try {
-            cadastrarEnvioService.execute(envioRequest);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Compra enviada com sucesso");
-        }catch(RuntimeException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao tentar enviar uma compra: Informações insuficientes");
+            CompletableFuture<EnvioErrorResponse> futureResponse = cadastrarEnvioService.execute(envioRequest);
+            EnvioErrorResponse envioErrorResponse = futureResponse.get(); // Aguarda o resultado da execução
+            if (envioErrorResponse != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(envioErrorResponse);
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            log.error("Erro ao cadastrar envio: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+        return null;
     }
 
 
