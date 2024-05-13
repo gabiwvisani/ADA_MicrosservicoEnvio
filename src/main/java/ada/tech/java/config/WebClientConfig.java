@@ -10,11 +10,11 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 @Configuration
 public class WebClientConfig {
-    @Value("http://localhost:9080")
-    private String envioUrl;
+//    @Value("http://localhost:9080")
+//    private String envioUrl;
     @Bean
     WebClient webClient(){
-        return WebClient.builder().baseUrl(envioUrl)
+        return WebClient.builder().baseUrl("http://localhost:9080")
                 .build();
     }
     //@Bean

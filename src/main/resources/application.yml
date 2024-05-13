@@ -55,13 +55,10 @@ spring:
       channel:
         size: 50
       checkout-timeout: 10000
-#  sql:
-#    init:
-#      continue-on-error: true
+
 
       negocio:
         envio:
           url: http://localhost:5672
-          fila: fila-envio
-#            reservar:
-#              out: fila_envio
+          fila: Informar-Erro-Envio
+

@@ -26,7 +26,6 @@ public class AlterarStatusEnvioService {
             if (envio.isPresent()) {
                 envio.get().setStatusEnviadoProCliente(novoStatus);
                 envioRepository.save(envio.get());
-                //cadastrarEnvioService.execute(envio.orElse(null));
                 return futureEnvio;
             } else {
                 return null;

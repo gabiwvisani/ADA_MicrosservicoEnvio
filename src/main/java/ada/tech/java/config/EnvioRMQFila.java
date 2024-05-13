@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class EnvioRMQFila {
-    @Value("http://localhost:5672")
-    private String fila;
+//    @Value("http://localhost:5672")
+//    private String fila;
     @Bean
     public Queue queue(){
-        return new Queue("fila-envio", true);
+        return new Queue("Informar-Erro-Envio", true);
     }
 }
